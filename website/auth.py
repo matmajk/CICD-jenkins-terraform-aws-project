@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template
 
 auth = Blueprint('auth', __name__)
-#ustawianie view na endpointach URL
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template("login.html", boolean=True)
 
@@ -10,6 +9,6 @@ def login():
 def logout():
     return "<p>Logout</p>"
 
-@auth.route('/sign-up')
+@auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_upt():
     return render_template("sign_up.html")
