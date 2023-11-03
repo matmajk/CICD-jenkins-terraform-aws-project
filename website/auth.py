@@ -44,20 +44,19 @@ def sign_up():
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already exists.', category='error')
-        # example tests for form credentials - with flashing messages
-        elif len(email) < 4:  # type: ignore
+        elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
-        elif len(first_name) < 2:  # type: ignore
+        elif len(first_name) < 2:
             flash('First name must be greater than 1 character.', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match.', category='error')
-        elif len(password1) < 9:  # type: ignore
+        elif len(password1) < 9:
             flash('Password must be at least 8 characters.', category='error')
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1))
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True)
+            login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
 
