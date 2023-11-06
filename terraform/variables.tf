@@ -21,9 +21,9 @@ variable "instance_type" {
 }
 
 variable "instance_name" {
-  type = string
+  type        = string
   description = "EC2 Instance name"
-  default = "terraform-instance"
+  default     = "terraform-instance"
 }
 
 #variable "aws_access_key" {
