@@ -26,17 +26,17 @@ variable "instance_name" {
   default = "terraform-instance"
 }
 
-#variable "aws_access_key" {
-#  type        = string
-#  description = "Access key for AWS"
-#  sensitive   = "true"
-#}
-#
-#variable "aws_secret_key" {
-#  type        = string
-#  description = "Secret key for AWS"
-#  sensitive   = "true"
-#}
+variable "aws_access_key" {
+  type        = string
+  description = "Access key for AWS"
+  sensitive   = "true"
+}
+
+variable "aws_secret_key" {
+  type        = string
+  description = "Secret key for AWS"
+  sensitive   = "true"
+}
 
 variable "key_name" {
   type        = string
