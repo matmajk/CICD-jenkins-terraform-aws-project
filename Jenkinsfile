@@ -1,28 +1,34 @@
 #!/usr/bin/env groovy
 
-def repoCredentials = ''
-def repoURL = 'https://github.com/matmajk/python-web-db-project.git'
-
 pipeline {
     agent any
-
     stages {
-        stage('Build') {
+        stage('Fetch code') {
             steps {
-                echo 'Building..'
+                git branch: 'master', url: 'https://github.com/matmajk/python-web-db-project.git'
             }
         }
-
+        stage('Bring up') {
+            steps {
+                sh '''#!/bin/bash -e
+                cd terraform
+                terraform init
+                terraform validate
+                terraform plan -var-file="terraform.tfvars" -out current_plan.tfplan
+                terraform apply "current_plan.tfplan"
+                terraform output > output.txt
+                '''
+            }
+        }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'mvn test'
             }
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying..'
-            }
+    }
+    post {
+        always {
+            cleanWS()
         }
     }
 }
