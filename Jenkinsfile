@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Fetch code') {
             steps {
-                git branch: 'test', url: 'https://github.com/matmajk/python-web-db-project.git'
+                git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project.git'
             }
         }
         stage('Bring up') {
@@ -20,11 +20,6 @@ pipeline {
                 terraform output > output.txt
                 '''
                 }
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
             }
         }
     }
