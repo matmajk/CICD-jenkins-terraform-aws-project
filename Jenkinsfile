@@ -2,9 +2,6 @@
 
 pipeline {
     agent any
-    environment {
-        AWS_AC
-    }
     stages {
         stage('Fetch code') {
             steps {
