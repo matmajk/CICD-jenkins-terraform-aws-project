@@ -41,7 +41,7 @@ variable "instance_name" {
 variable "key_name" {
   type        = string
   description = ".ppk / .pem Key name "
-  default     = "terraform-aws-credentials"
+  default     = "terraform-key"
 }
 
 #variable "public_key" {

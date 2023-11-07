@@ -1,7 +1,17 @@
-#resource "aws_key_pair" "terraform-key" {
-#  key_name   = var.key_name
-##  public_key = file(var.public_key)
-#}
+resource "aws_key_pair" "terraform-key" {
+  key_name   = var.key_name
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits = 4096
+}
+
+resource "local_file" "terraform-key" {
+  content = tls_private_key.rsa.private_key_pem
+  filename = var.key_name
+}
 
 resource "aws_instance" "python-web-project" {
   ami               = "ami-0d118c6e63bcb554e"
