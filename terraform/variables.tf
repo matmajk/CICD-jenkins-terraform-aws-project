@@ -21,38 +21,38 @@ variable "instance_type" {
 }
 
 variable "instance_name" {
-  type = string
+  type        = string
   description = "EC2 Instance name"
-  default = "terraform-instance"
+  default     = "terraform-instance"
 }
 
-variable "aws_access_key" {
-  type        = string
-  description = "Access key for AWS"
-  sensitive   = "true"
-}
-
-variable "aws_secret_key" {
-  type        = string
-  description = "Secret key for AWS"
-  sensitive   = "true"
-}
+#variable "aws_access_key" {
+#  type        = string
+#  description = "Access key for AWS"
+#  sensitive   = "true"
+#}
+#
+#variable "aws_secret_key" {
+#  type        = string
+#  description = "Secret key for AWS"
+#  sensitive   = "true"
+#}
 
 variable "key_name" {
   type        = string
   description = ".ppk / .pem Key name "
-  default     = "terraform-key"
+  default     = "terraform-aws-credentials"
 }
 
-variable "public_key" {
-  type    = string
-  default = "terraform-key.pub"
-}
-
-variable "private_key" {
-  type    = string
-  default = "terraform-key"
-}
+#variable "public_key" {
+#  type    = string
+#  default = "terraform-key.pub"
+#}
+#
+#variable "private_key" {
+#  type    = string
+#  default = "terraform-key"
+#}
 
 variable "default_cidr_route" {
   type        = string

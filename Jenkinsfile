@@ -2,6 +2,9 @@
 
 pipeline {
     agent any
+    environment {
+        AWS_AC
+    }
     stages {
         stage('Fetch code') {
             steps {
@@ -10,6 +13,7 @@ pipeline {
         }
         stage('Bring up') {
             steps {
+                withAWS(credentials: 'terraform-aws-credentials') {
                 sh '''#!/bin/bash -e
                 cd terraform
                 terraform init
@@ -18,6 +22,7 @@ pipeline {
                 terraform apply "current_plan.tfplan"
                 terraform output > output.txt
                 '''
+                }
             }
         }
         stage('Test') {
