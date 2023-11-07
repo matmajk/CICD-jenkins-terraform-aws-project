@@ -44,16 +44,6 @@ variable "key_name" {
   default     = "terraform-key"
 }
 
-variable "public_key" {
-  type    = string
-  default = "terraform-key.pub"
-}
-
-variable "private_key" {
-  type    = string
-  default = "terraform-key"
-}
-
 variable "default_cidr_route" {
   type        = string
   description = "Default route CIDR"
