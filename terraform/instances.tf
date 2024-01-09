@@ -23,7 +23,6 @@ resource "aws_instance" "python-web-project" {
   #  key_name               = aws_key_pair.terraform-key.key_name
   key_name = var.key_name
   tags     = local.resource_tags
-
   #  connection {
   #    user        = var.user
   #    private_key = file(var.private_key)
