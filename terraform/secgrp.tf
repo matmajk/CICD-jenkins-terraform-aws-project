@@ -1,5 +1,5 @@
 resource "aws_security_group" "terraform-sg" {
-  vpc_id      = aws_vpc.Frankfurt-vpc.id
+  vpc_id      = var.vpc_id
   name        = "terraform-sg"
   description = "Security group for MyIP SSH and for traffic from anywhere"
 
