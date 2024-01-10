@@ -1,4 +1,4 @@
-resource "aws_vpc" "terraform-vpc" {
+resource "aws_vpc" "Frankfurt-vpc" {
   cidr_block           = var.vpc_cidr_block
   instance_tenancy     = "default"
   enable_dns_hostnames = var.enable_dns_hostnames
@@ -7,7 +7,7 @@ resource "aws_vpc" "terraform-vpc" {
 }
 
 resource "aws_subnet" "terraform-subnet-public" {
-  vpc_id                  = aws_vpc.terraform-vpc.id
+  vpc_id                  = aws_vpc.Frankfurt-vpc.id
   cidr_block              = var.vpc_subnet_cidr_block
   map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone       = var.availability_zone
@@ -16,13 +16,13 @@ resource "aws_subnet" "terraform-subnet-public" {
 }
 
 resource "aws_internet_gateway" "terraform-igw" {
-  vpc_id = aws_vpc.terraform-vpc.id
+  vpc_id = aws_vpc.Frankfurt-vpc.id
 
   tags = local.resource_tags
 }
 
 resource "aws_route_table" "terraform-rtb" {
-  vpc_id = aws_vpc.terraform-vpc.id
+  vpc_id = aws_vpc.Frankfurt-vpc.id
 
   route {
     cidr_block = var.default_cidr_route
