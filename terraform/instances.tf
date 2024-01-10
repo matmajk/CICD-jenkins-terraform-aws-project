@@ -7,15 +7,18 @@ resource "aws_key_pair" "terraform-key" {
   key_name   = var.key_name
   public_key = tls_private_key.rsa.public_key_openssh
 
-  provisioner = "local-exec" {
-    command = "echo '${tls_private_key.rsa.private_key_pem}' > ./terraform-key.pem"
-    }
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo '${tls_private_key.rsa.private_key_pem}' > terraform-key.pem
+      chmod 400 terraform-key.pem
+    EOT
+  }
 }
 
-resource "local_file" "terraform-key" {
-  content = tls_private_key.rsa.private_key_pem
-  filename = var.key_name
-}
+#  resource "local_file" "terraform-key" {
+#   content = tls_private_key.rsa.private_key_pem
+#   filename = var.key_name
+#  }
 
 resource "aws_instance" "python-web-project" {
   ami               = "ami-0d118c6e63bcb554e"
