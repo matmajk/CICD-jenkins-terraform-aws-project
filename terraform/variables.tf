@@ -41,7 +41,7 @@ variable "instance_name" {
 variable "key_name" {
   type        = string
   description = ".ppk / .pem Key name "
-  default     = "terraform-key.pem"
+  default     = "terraform-key"
 }
 
 variable "default_cidr_route" {
