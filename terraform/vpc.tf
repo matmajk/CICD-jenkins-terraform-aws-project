@@ -15,24 +15,24 @@ resource "aws_subnet" "terraform-subnet-public" {
   tags = local.resource_tags
 }
 
-resource "aws_internet_gateway" "terraform-igw" {
-  vpc_id = var.vpc_id
+#  resource "aws_internet_gateway" "terraform-igw" {
+#    vpc_id = var.vpc_id
+#  
+#    tags = local.resource_tags
+#  }
 
-  tags = local.resource_tags
-}
-
-resource "aws_route_table" "terraform-rtb" {
-  vpc_id = var.vpc_id
-
-  route {
-    cidr_block = var.default_cidr_route
-    gateway_id = aws_internet_gateway.terraform-igw.id
-  }
-
-  tags = local.resource_tags
-}
-
-resource "aws_route_table_association" "terraform-subnet-rta" {
-  subnet_id      = aws_subnet.terraform-subnet-public.id
-  route_table_id = aws_route_table.terraform-rtb.id
-}
+#  resource "aws_route_table" "terraform-rtb" {
+#    vpc_id = var.vpc_id
+#  
+#    route {
+#      cidr_block = var.default_cidr_route
+#      gateway_id = aws_internet_gateway.terraform-igw.id
+#    }
+#  
+#    tags = local.resource_tags
+#  }
+#  
+#  resource "aws_route_table_association" "terraform-subnet-rta" {
+#    subnet_id      = aws_subnet.terraform-subnet-public.id
+#    route_table_id = aws_route_table.terraform-rtb.id
+#  }
