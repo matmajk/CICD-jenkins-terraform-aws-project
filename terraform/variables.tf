@@ -50,6 +50,12 @@ variable "default_cidr_route" {
   default     = "0.0.0.0/0"
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "VPC id"
+  default     = "vpc-0a9756a8617a9f037"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   description = "Base CIDR block for VPC"
