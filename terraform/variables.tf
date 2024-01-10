@@ -65,7 +65,7 @@ variable "vpc_cidr_block" {
 variable "vpc_subnet_cidr_block" {
   type        = string
   description = "CIDR block for subnet in VPC"
-  default     = "172.31.1.0/24"
+  default     = "172.31.64.0/20"
 }
 
 variable "map_public_ip_on_launch" {
