@@ -46,9 +46,11 @@ pipeline {
         }
         stage('Terraform Apply') {
             steps {
-                dir('terraform') {
-                    sh "terraform apply -input=false current_plan.tfplan"
-                    sh 'terraform output > output.txt'
+                withAWS(credentials: 'terraform-aws-credentials') {
+                    dir('terraform') {
+                        sh "terraform apply -input=false current_plan.tfplan"
+                        sh 'terraform output > output.txt'
+                    }
                 }
             }
         }
@@ -67,14 +69,18 @@ pipeline {
     }
     post {
         failure {
-            dir('terraform') {
-                sh "terraform apply -destroy -auto-approve"
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
             }
             cleanWs()
         }
         aborted{
-            dir('terraform') {
-                sh "terraform apply -destroy -auto-approve"
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
             }
             cleanWs()
         }
