@@ -1,4 +1,7 @@
 ---
+  - name: Wat for target connection to become reachable
+    wait_for_connection:
+
   - name: gather_facts from machines
     hosts: all
     gather_facts: true
