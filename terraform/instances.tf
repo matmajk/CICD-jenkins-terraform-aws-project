@@ -9,7 +9,7 @@ resource "aws_key_pair" "terraform-key" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      echo '${tls_private_key.rsa.private_key_pem}' > terraform-key.pem
+      echo '${tls_private_key.rsa.private_key_pem}' > ~/.ssh/terraform-key.pem
       chmod 400 terraform-key.pem
     EOT
   }
