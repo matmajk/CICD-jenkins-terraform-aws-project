@@ -53,6 +53,13 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    dir('terraform') {
+                        archiveArtifacts artifacts: 'output.txt'
+                    }
+                }
+            }
         }
         stage('Ansible configuration') {
             steps {
@@ -68,22 +75,22 @@ pipeline {
         }
     }
     post {
-//         failure {
-//             withAWS(credentials: 'terraform-aws-credentials') {
-//                 dir('terraform') {
-//                     sh "terraform apply -destroy -auto-approve"
-//                 }
-//             }
-//             cleanWs()
-//         }
-//         aborted{
-//             withAWS(credentials: 'terraform-aws-credentials') {
-//                 dir('terraform') {
-//                     sh "terraform apply -destroy -auto-approve"
-//                 }
-//             }
-//             cleanWs()
-//         }
+        failure {
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
+            }
+            cleanWs()
+        }
+        aborted{
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
+            }
+            cleanWs()
+        }
         success {
             cleanWs()
         }
