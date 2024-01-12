@@ -42,8 +42,8 @@
   - name: Add remote "ubuntu" user to "docker" group
     user:
       name: "ubuntu"
-      group: "docker"
-      append: yes
+      groups: "docker"
+      append: true
     tags:
       - docker
   - name: Install docker-compose
