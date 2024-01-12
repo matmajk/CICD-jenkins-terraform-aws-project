@@ -53,13 +53,6 @@ pipeline {
                     }
                 }
             }
-            post {
-                always {
-                    dir('terraform') {
-                        archiveArtifacts artifacts: 'output.txt'
-                    }
-                }
-            }
         }
         stage('Ansible configuration') {
             steps {
