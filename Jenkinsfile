@@ -2,10 +2,13 @@
 
 pipeline {
     agent any
+    parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+    }
     stages {
         stage('Fetch code') {
             steps {
-                git branch: 'master', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project.git'
+                git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
             }
         }
         stage('Bring up') {
