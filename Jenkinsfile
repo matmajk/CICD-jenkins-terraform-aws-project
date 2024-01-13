@@ -68,7 +68,23 @@ pipeline {
         }
     }
     post {
-        always {
+        failure {
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
+            }
+            cleanWs()
+        }
+        aborted{
+            withAWS(credentials: 'terraform-aws-credentials') {
+                dir('terraform') {
+                    sh "terraform apply -destroy -auto-approve"
+                }
+            }
+            cleanWs()
+        }
+        success {
             cleanWs()
         }
     }
