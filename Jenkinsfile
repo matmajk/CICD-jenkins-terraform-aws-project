@@ -22,7 +22,15 @@ pipeline {
                     }
                 }
             }
-            stage('Approval') {
+            post {
+                always {
+                    dir('terraform') {
+                        archiveArtifacts artifacts: 'tfplan.txt'
+                    }
+                }
+            }
+        }
+        stage('Approval') {
             when {
                 not {
                     equals expected: true, actual: params.autoApprove
@@ -36,10 +44,12 @@ pipeline {
                 }
             }
         }
-            post {
-                always {
+        stage('Terraform Apply') {
+            steps {
+                withAWS(credentials: 'terraform-aws-credentials') {
                     dir('terraform') {
-                        archiveArtifacts artifacts: 'tfplan.txt'
+                        sh "terraform apply -input=false current_plan.tfplan"
+                        sh 'terraform output > output.txt'
                     }
                 }
             }
