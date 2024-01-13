@@ -11,21 +11,22 @@ pipeline {
                 git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
             }
         }
-        stage('Bring up') {
+        stage('Prepare Terraform Plan') {
             steps {
                 withAWS(credentials: 'terraform-aws-credentials') {
-                sh '''#!/bin/bash -e
-                cd terraform
-                terraform init
-                terraform validate
-                terraform plan -var-file="terraform.tfvars" -out current_plan.tfplan
-                terraform apply "current_plan.tfplan"
-                terraform output > output.txt
-                cd ..
-                python3 ./parser.py
-                cd ansible
-                ansible-playbook -i hosts project.yml
-                '''
+                    dir('terraform') {
+                        sh 'terraform init -input=false'
+                        sh 'terraform validate'
+                        sh 'terraform plan -input=false -var-file="terraform.tfvars" -out current_plan.tfplan'
+                        sh 'terraform show -no-color current_plan.tfplan > tfplan.txt'
+                    }
+                }
+            }
+            post {
+                always {
+                    dir('terraform') {
+                        archiveArtifacts artifacts: 'tfplan.txt'
+                    }
                 }
             }
         }
