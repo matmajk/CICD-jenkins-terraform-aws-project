@@ -54,6 +54,18 @@ pipeline {
                 }
             }
         }
+        stage('Ansible configuration') {
+            steps {
+                withAWS(credentials: 'terraform-aws-credentials') {
+                    sh 'ls'
+                    sh 'pwd'
+                    sh 'python3 ./parser.py'
+                    dir('ansible') {
+                        sh 'ansible-playbook -i hosts project.yml'
+                    }
+                }
+            }
+        }
     }
     post {
         always {
