@@ -74,7 +74,7 @@ pipeline {
                     sh "terraform apply -destroy -auto-approve"
                 }
             }
-            cleanWs()
+//             cleanWs()
         }
         aborted{
             withAWS(credentials: 'terraform-aws-credentials') {
@@ -82,10 +82,10 @@ pipeline {
                     sh "terraform apply -destroy -auto-approve"
                 }
             }
-            cleanWs()
+//             cleanWs()
         }
-        success {
-            cleanWs()
-        }
+//         success {
+//             cleanWs()
+//         }
     }
 }
