@@ -50,16 +50,22 @@ variable "default_cidr_route" {
   default     = "0.0.0.0/0"
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "VPC id"
+  default     = "vpc-0a9756a8617a9f037"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   description = "Base CIDR block for VPC"
-  default     = "10.0.0.0/16"
+  default     = "172.31.0.0/16"
 }
 
 variable "vpc_subnet_cidr_block" {
   type        = string
   description = "CIDR block for subnet in VPC"
-  default     = "10.0.1.0/24"
+  default     = "172.31.64.0/20"
 }
 
 variable "map_public_ip_on_launch" {
