@@ -16,13 +16,13 @@
       - docker
   - name: Add official GPG key to Docker
     apt_key:
-      id: 0EBFCD88
+      url: https://download.docker.com/linux/ubuntu/gpg
       state: present
     tags:
       - docker
   - name: Set up the stable repository
     apt_repository:
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
       state: present
       update_cache: yes
     tags:
@@ -42,8 +42,8 @@
   - name: Add remote "ubuntu" user to "docker" group
     user:
       name: "ubuntu"
-      group: "docker"
-      append: yes
+      groups: "docker"
+      append: true
     tags:
       - docker
   - name: Install docker-compose
