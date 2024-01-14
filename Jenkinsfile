@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Fetch code') {
             steps {
-                git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
+                git branch: 'master', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
             }
         }
         stage('Prepare Terraform Plan') {
