@@ -57,5 +57,18 @@ pipeline {
 		        archiveArtifacts artifacts: 'web-app-archive*.tar.gz', onlyIfSuccessful: true
 		    }
 		}
+		stage('Testing JFrog Artifactory') {
+            steps {
+                jf '-v'
+                jf 'c show'
+                jf 'rt ping'
+            }
+        }
+        stage('Upload archive to Artifactory') {
+            steps {
+                jf 'rt u web-app-archive*.tar.gz web-app-repo/'
+                jf 'rt bp'
+            }
+        }
     }
 }
