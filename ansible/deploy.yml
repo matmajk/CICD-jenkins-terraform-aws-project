@@ -4,7 +4,7 @@
   tasks:
     - name: Log in to DockerHub with token
       docker_login:
-        registry_url: https://hub.docker.com/repository/docker/devopsmat/note-web-app/general
+#        registry_url: https://hub.docker.com/repository/docker/devopsmat/note-web-app/general
         username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
 #        email: "{{ lookup('env', 'DOCKERHUB_EMAIL') }}"
