@@ -19,4 +19,5 @@
       docker_container:
           name: note-web-app
           image: devopsmat/note-web-app:latest
+          published_ports: 5000:3003
           state: started
