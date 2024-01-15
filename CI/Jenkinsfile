@@ -70,5 +70,26 @@ pipeline {
                 jf 'rt bp'
             }
         }
+        stage('Build docker image') {
+            steps {
+                sh 'pwd'
+                script {
+                    dockerImage = docker.build("devopsmat/note-web-app" + ":$BUILD_NUMBER", ".")
+                }
+            }
+        }
+        stage('Upload docker image to DockerHub') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push devopsmat/note-web-app:$BUILD_NUMBER'
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
+            sh 'docker rmi devopsmat/note-web-app:$BUILD_NUMBER'
+            cleanWs()
+        }
     }
 }
