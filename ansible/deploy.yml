@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Log in to DockerHub with token
+      docker_login:
+        username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
+        password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
+    - name: Pull Docker image from DockerHub
+      docker_image:
+        name: devopsmat/note-web-app:latest
+        source: pull
+    - name: Log out of DockerHub
+      docker_login:
+        state: absent
+    - name: Run Docker container on EC2 instance
+      docker_container:
+        name: note-web-app
+        image: devopsmat/note-web-app:latest
+        published_ports: 5000:3003
+        state: started
