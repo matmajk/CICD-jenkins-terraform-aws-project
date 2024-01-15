@@ -72,7 +72,7 @@ pipeline {
                     sh 'ls'
                     sh 'pwd'
                     dir('ansible') {
-                        sh 'ansible-playbook -i deploy.yml'
+                        sh 'ansible-playbook -i hosts deploy.yml'
                     }
                 }
             }
