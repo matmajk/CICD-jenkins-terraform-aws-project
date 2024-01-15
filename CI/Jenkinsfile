@@ -10,7 +10,7 @@ pipeline {
 	stages {
 		stage ('Fetch code') {
 			steps {
-				git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
+				git branch: 'master', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
 			}
 		}
 		stage ('Build') {
@@ -74,14 +74,14 @@ pipeline {
             steps {
                 sh 'pwd'
                 script {
-                    dockerImage = docker.build("devopsmat/note-web-app" + ":$BUILD_NUMBER", ".")
+                    dockerImage = docker.build("devopsmat/note-web-app" + ":latest", ".")
                 }
             }
         }
         stage('Upload docker image to DockerHub') {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push devopsmat/note-web-app:$BUILD_NUMBER'
+                sh 'docker push devopsmat/note-web-app:latest'
             }
         }
         stage('Deploy docker image to target VM') {
@@ -99,7 +99,7 @@ pipeline {
     post {
         always {
             sh 'docker logout'
-            sh 'docker rmi devopsmat/note-web-app:$BUILD_NUMBER'
+            sh 'docker rmi devopsmat/note-web-app:latest'
             cleanWs()
         }
     }
