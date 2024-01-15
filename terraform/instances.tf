@@ -1,21 +1,21 @@
-resource "tls_private_key" "rsa" {
-  algorithm = "RSA"
-  rsa_bits = 4096
-}
-
-resource "aws_key_pair" "terraform-key" {
-  key_name   = var.key_name
-  public_key = tls_private_key.rsa.public_key_openssh
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      echo '${tls_private_key.rsa.private_key_pem}' > ../terraform-key.pem
-      chmod 400 ../terraform-key.pem
-      echo '${tls_private_key.rsa.private_key_pem}' > ~/secrets/terraform-key.pem
-      chmod 400 ~/secrets/terraform-key.pem
-    EOT
-  }
-}
+#resource "tls_private_key" "rsa" {
+#  algorithm = "RSA"
+#  rsa_bits = 4096
+#}
+#
+#resource "aws_key_pair" "terraform-key" {
+#  key_name   = var.key_name
+#  public_key = tls_private_key.rsa.public_key_openssh
+#
+#  provisioner "local-exec" {
+#    command = <<-EOT
+#      echo '${tls_private_key.rsa.private_key_pem}' > ../terraform-key.pem
+#      chmod 400 ../terraform-key.pem
+#      echo '${tls_private_key.rsa.private_key_pem}' > ~/secrets/terraform-key.pem
+#      chmod 400 ~/secrets/terraform-key.pem
+#    EOT
+#  }
+#}
 
 #  resource "local_file" "terraform-key" {
 #   content = tls_private_key.rsa.private_key_pem
