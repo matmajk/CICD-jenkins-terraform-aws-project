@@ -6,3 +6,7 @@
       docker_login:
         username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
+    - name: Pull Docker image from DockerHub
+      docker_image:
+        name: devopsmat/note-web-app:latest
+        source: pull
