@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Log in to DockerHub with token
+      docker_login:
+        registry_url: https://hub.docker.com/repository/docker/devopsmat/note-web-app/general
+        username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
+        password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
+        email: "{{ lookup('env', 'DOCKERHUB_EMAIL') }}"
+    - name: Pull Docker image from DockerHub
+      docker_image:
+          name: devopsmat/note-web-app:latest
+          source: pull
+    - name: Run Docker container on EC2 instance
+      docker_container:
+          name: note-web-app
+          image: devopsmat/note-web-app:latest
+          state: started
