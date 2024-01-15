@@ -1,0 +1,27 @@
+pipeline {
+	agent any
+	tools {
+        jdk "OracleJDK11"
+        jfrog 'jfrog-cli'
+    }
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
+    }
+	stages {
+		stage ('Fetch code') {
+			steps {
+				git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
+			}
+		}
+		stage ('Build') {
+			steps {
+				sh 'ls'
+				sh 'pwd'
+			}
+			post {
+				success {
+					echo "Archiving the artifacts"
+					archiveArtifacts artifacts: '*/**', excludes: 'README.md'
+				}
+			}
+		}
