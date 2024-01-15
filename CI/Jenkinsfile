@@ -1,0 +1,106 @@
+pipeline {
+	agent any
+	tools {
+        jdk "OracleJDK11"
+        jfrog 'jfrog-cli'
+    }
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
+    }
+	stages {
+		stage ('Fetch code') {
+			steps {
+				git branch: 'master', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
+			}
+		}
+		stage ('Build') {
+			steps {
+				sh 'ls'
+				sh 'pwd'
+			}
+			post {
+				success {
+					echo "Archiving the artifacts"
+					archiveArtifacts artifacts: '*/**', excludes: 'README.md'
+				}
+			}
+		}
+		stage('SonarQube analysis') {
+        	environment {
+        		scannerHome = tool 'sonar4.7'
+        	}
+        	steps {
+                withSonarQubeEnv('sonar-qube') {
+					sh '''${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=NoteApp \
+                        -Dsonar.projectName=note-web-app \
+                        -Dsonar.projectVersion=1.0 \
+                        -Dsonar.sources=. \
+                        -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                        -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                        -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                        -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              	}
+        	}
+        }
+        stage('Quality gate') {
+        	steps {
+        		timeout(time: 3, unit: 'MINUTES') {
+        			waitForQualityGate abortPipeline: true
+        		}
+        	}
+        }
+        stage('Packing to archive') {
+		    steps {
+		        script {
+		            sh "tar -czvf web-app-archive_${BUILD_NUMBER}.tar.gz website Dockerfile main.py requirements.txt"
+		        }
+		        archiveArtifacts artifacts: 'web-app-archive*.tar.gz', onlyIfSuccessful: true
+		    }
+		}
+		stage('Testing JFrog Artifactory') {
+            steps {
+                jf '-v'
+                jf 'c show'
+                jf 'rt ping'
+            }
+        }
+        stage('Upload archive to Artifactory') {
+            steps {
+                jf 'rt u web-app-archive*.tar.gz web-app-repo/'
+                jf 'rt bp'
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                sh 'pwd'
+                script {
+                    dockerImage = docker.build("devopsmat/note-web-app" + ":latest", ".")
+                }
+            }
+        }
+        stage('Upload docker image to DockerHub') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push devopsmat/note-web-app:latest'
+            }
+        }
+        stage('Deploy docker image to target VM') {
+            steps {
+                withAWS(credentials: 'terraform-aws-credentials') {
+                    sh 'ls'
+                    sh 'pwd'
+                    dir('ansible') {
+                        sh 'ansible-playbook -i hosts -vvvv deploy.yml'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
+            sh 'docker rmi devopsmat/note-web-app:latest'
+            cleanWs()
+        }
+    }
+}
