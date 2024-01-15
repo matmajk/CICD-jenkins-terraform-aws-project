@@ -49,5 +49,13 @@ pipeline {
         		}
         	}
         }
+        stage('Packing to archive') {
+		    steps {
+		        script {
+		            sh "tar -czvf web-app-archive_${BUILD_NUMBER}.tar.gz website Dockerfile main.py requirements.txt"
+		        }
+		        archiveArtifacts artifacts: 'web-app-archive*.tar.gz', onlyIfSuccessful: true
+		    }
+		}
     }
 }
