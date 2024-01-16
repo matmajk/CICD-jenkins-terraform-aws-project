@@ -10,7 +10,7 @@ pipeline {
 	stages {
 		stage ('Fetch code') {
 			steps {
-				git branch: 'master', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
+				git branch: 'test', url: 'https://github.com/matmajk/CICD-jenkins-terraform-aws-project'
 			}
 		}
 		stage ('Build') {
@@ -82,17 +82,6 @@ pipeline {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh 'docker push devopsmat/note-web-app:latest'
-            }
-        }
-        stage('Deploy docker image to target VM') {
-            steps {
-                withAWS(credentials: 'terraform-aws-credentials') {
-                    sh 'ls'
-                    sh 'pwd'
-                    dir('ansible') {
-                        sh 'ansible-playbook -i hosts deploy.yml'
-                    }
-                }
             }
         }
     }

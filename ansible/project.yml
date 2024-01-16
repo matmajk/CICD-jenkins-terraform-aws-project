@@ -6,7 +6,7 @@
         - name: Wait 300 seconds for target connection
           ansible.builtin.wait_for_connection:
             delay: 15
-            timeout: 300
+            timeout: 240
 
   - name: gather_facts from machines
     hosts: all
