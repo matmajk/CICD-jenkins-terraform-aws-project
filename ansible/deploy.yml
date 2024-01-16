@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: instances
   become: yes
   tasks:
     - name: Log in to DockerHub with token
