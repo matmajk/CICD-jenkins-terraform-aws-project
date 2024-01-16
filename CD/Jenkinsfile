@@ -66,6 +66,17 @@ pipeline {
                 }
             }
         }
+        stage('Deploy docker image to target VM') {
+            steps {
+                withAWS(credentials: 'terraform-aws-credentials') {
+                    sh 'ls'
+                    sh 'pwd'
+                    dir('ansible') {
+                        sh 'ansible-playbook -i hosts deploy.yml'
+                    }
+                }
+            }
+        }
     }
     post {
         failure {
